@@ -274,6 +274,11 @@ namespace BezierGraphics
         {
             LogicFile.ZAmimatePosition = ZCoordinateTrackBar.Value/10f;
             LightMovementLabel.Text = "Z coordinate of the light: " + (ZCoordinateTrackBar.Value / 10f).ToString();
+
+            ColorFile.lightPosition = new Vector3(ColorFile.lightPosition.X,
+                ColorFile.lightPosition.Y, ZCoordinateTrackBar.Value / 10f);
+
+            LogicFile.FillTriangles();
         }
     }
 }

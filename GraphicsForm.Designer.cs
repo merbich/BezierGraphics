@@ -404,8 +404,8 @@ namespace BezierGraphics
             // ZCoordinateTrackBar
             // 
             this.ZCoordinateTrackBar.Location = new System.Drawing.Point(179, 58);
-            this.ZCoordinateTrackBar.Maximum = 50;
-            this.ZCoordinateTrackBar.Minimum = 20;
+            this.ZCoordinateTrackBar.Maximum = 30;
+            this.ZCoordinateTrackBar.Minimum = 10;
             this.ZCoordinateTrackBar.Name = "ZCoordinateTrackBar";
             this.ZCoordinateTrackBar.Size = new System.Drawing.Size(264, 56);
             this.ZCoordinateTrackBar.SmallChange = 2;
