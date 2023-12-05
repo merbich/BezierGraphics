@@ -25,6 +25,9 @@ namespace BezierGraphics
             //LogicFile.text = this.testTextBox;
             LogicFile.LogicInit();
             SolidColorRadioButton.Checked = true;
+            ShowColorsCheckBox.Checked = true;
+            isReflectorsCheckBox.Checked = true;
+            isLightCheckBox.Checked = false;
             KDValueTrackBar.Value = 5;
             KSValueTrackBar.Value = 5;
             MValueTrackBar.Value = 30;
@@ -36,16 +39,61 @@ namespace BezierGraphics
 
         private void ShowControlPointsCheckBox_CheckStateChanged(object sender, EventArgs e)
         {
-            if (ShowControlPointsCheckBox.Checked) LogicFile.isControlPoints = true;
-            else LogicFile.isControlPoints = false;
-            LogicFile.FillTriangles();
+            LogicFile.g.Clear(Color.White);
+            if (ShowControlPointsCheckBox.Checked)
+            {
+                LogicFile.isControlPoints = true;
+                if (LogicFile.isColors)
+                {
+                    LogicFile.FillTriangles();
+                }
+                else
+                {
+                    LogicFile.Draw();
+                }
+            }
+            else
+            {
+                LogicFile.isControlPoints = false;
+                if (LogicFile.isColors)
+                {
+                    LogicFile.FillTriangles();
+                }
+                else
+                {
+                    LogicFile.Draw();
+                }
+            }
         }
 
         private void ShowGridCheckBox_CheckStateChanged(object sender, EventArgs e)
         {
-            if (ShowGridCheckBox.Checked) LogicFile.isBezierGrid = true;
-            else LogicFile.isBezierGrid = false;
-            LogicFile.FillTriangles();
+            LogicFile.g.Clear(Color.White);
+            if (ShowGridCheckBox.Checked)
+            {
+                LogicFile.isBezierGrid = true;
+                if(LogicFile.isColors)
+                {
+                    LogicFile.FillTriangles();
+                }
+                else
+                {
+                    LogicFile.Draw();
+                }
+            }
+            else
+            {
+                LogicFile.isBezierGrid = false;
+                if(LogicFile.isColors)
+                {
+                    LogicFile.FillTriangles();
+                }
+                else
+                {
+                    LogicFile.Draw();
+                }
+            }
+            //LogicFile.FillTriangles();
         }
 
         private void GridSizeTrackBar_ValueChanged(object sender, EventArgs e)
@@ -278,6 +326,62 @@ namespace BezierGraphics
             ColorFile.lightPosition = new Vector3(ColorFile.lightPosition.X,
                 ColorFile.lightPosition.Y, ZCoordinateTrackBar.Value / 10f);
 
+            LogicFile.FillTriangles();
+        }
+
+        private void ShowColorsCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if(ShowColorsCheckBox.Checked)
+            {
+                LogicFile.g.Clear(Color.White);
+                LogicFile.isColors = true;
+                LogicFile.FillTriangles();
+                pic.Refresh();
+            }
+            else
+            {
+                LogicFile.g.Clear(Color.White);
+                LogicFile.isColors = false;
+                LogicFile.Draw();
+            }
+        }
+
+        private void isLightCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if(isLightCheckBox.Checked)
+            {
+                LogicFile.isLight = true;
+            }
+            else
+            {
+                LogicFile.isLight = false;
+            }
+            LogicFile.FillTriangles();
+        }
+
+        private void isReflectorsCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if(isReflectorsCheckBox.Checked)
+            {
+                LogicFile.isReflections = true;
+            }
+            else
+            {
+                LogicFile.isReflections = false;
+            }
+            LogicFile.FillTriangles();
+        }
+
+        private void isRotateCheckBox_CheckStateChanged(object sender, EventArgs e)
+        {
+            if(isRotateCheckBox.Checked)
+            {
+                LogicFile.isRotate = true;
+            }
+            else
+            {
+                LogicFile.isRotate = false;
+            }
             LogicFile.FillTriangles();
         }
     }

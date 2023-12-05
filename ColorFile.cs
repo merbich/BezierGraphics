@@ -20,12 +20,21 @@ namespace BezierGraphics
 
         public static Vector3 lightColor = new Vector3(1f, 1f, 1f); // white
         public static Color lightColorC = Color.FromArgb(255, 255, 255); // white
-        public static Vector3 objColor = new Vector3(1f, 0f, 0f); // red
+        public static Vector3 objColor = new Vector3(1f, 1f, 1f); // red
         public static Color objColorC = Color.FromArgb(255, 0, 0); // red
         static Vector3 V = new Vector3(0f, 0f, 1f);
 
         // !
-        public static Vector3 lightPosition = new Vector3(0.5f, 0.5f, 0.5f);
+        public static Vector3 lightPosition = new Vector3(0.5f, 0.5f, 2f);
+
+        public static Vector3 ReflectorRPosition = new Vector3(0f, 0f, 0.5f);
+        public static Vector3 ReflectorGPosition = new Vector3(1f, 0f, 0.5f);
+        public static Vector3 ReflectorBPosition = new Vector3(0.5f, 1f, 0.5f);
+        public static Vector3 constlightPosition = new Vector3(0.5f, 0.5f, 0f);
+
+        public static Vector3 RColor = new Vector3(1f, 0f, 0f);
+        public static Vector3 GColor = new Vector3(0f, 1f, 0f);
+        public static Vector3 BColor = new Vector3(0f, 0f, 1f);
 
         public static Vector3 DefineVectorBetween(Vector3 begin, Vector3 end) // zmiana
         { 
@@ -148,16 +157,64 @@ namespace BezierGraphics
 
             float cosNL = ComputeCos(N, L);
             float cosVR = ComputeCos(V, ComputeR(N, L));
-
-            Vector3 I;
+            Vector3 I = new Vector3(0f, 0f, 0f);
+            //Vector3 I = kd * lightColor * objColor * cosNL + ks * lightColor * objColor * (float)Math.Pow(cosVR, m);
             if (!LogicFile.isBackgroundImage)
             {
-                I = kd * lightColor * objColor * cosNL + ks * lightColor * objColor * (float)Math.Pow(cosVR, m);
+                if (!LogicFile.isReflections && LogicFile.isLight)
+                {
+                    //I = new Vector3(0f, 0f, 0f);
+                    I = kd * lightColor * objColor * cosNL + ks * lightColor * objColor * (float)Math.Pow(cosVR, m);
+                }
+                else if (LogicFile.isReflections && !LogicFile.isLight)
+                {
+                    Vector3 rFactor = ComputeRFactor(point, N);
+                    Vector3 gFactor = ComputeGFactor(point, N);
+                    Vector3 bFactor = ComputeBFactor(point, N);
+                    I = rFactor + gFactor + bFactor;
+                }
+                else if(LogicFile.isLight && LogicFile.isReflections)
+                {
+                    //I = new Vector3(0f, 0f, 0f);
+                    I = kd * lightColor * objColor * cosNL + ks * lightColor * objColor * (float)Math.Pow(cosVR, m);
+                    Vector3 rFactor = ComputeRFactor(point, N);
+                    Vector3 gFactor = ComputeGFactor(point, N);
+                    Vector3 bFactor = ComputeBFactor(point, N);
+                    I = I + rFactor + gFactor + bFactor;
+                }
             }
             else
             {
                 Vector3 imageColor = ComputeBackgroundImageColor((int)(x * LogicFile.bm.Width), (int)(y * LogicFile.bm.Height));
-                I = kd * lightColor * imageColor * cosNL + ks * lightColor * imageColor * (float)Math.Pow(cosVR, m);
+
+                if (!LogicFile.isReflections && LogicFile.isLight)
+                {
+                    //I = new Vector3(0f, 0f, 0f);
+                    I = kd * lightColor * imageColor * cosNL + ks * lightColor * imageColor * (float)Math.Pow(cosVR, m);
+                    //I = kd * lightColor * objColor * cosNL + ks * lightColor * objColor * (float)Math.Pow(cosVR, m);
+                }
+                else if (LogicFile.isReflections && !LogicFile.isLight)
+                {
+                    Vector3 temp = objColor;
+                    objColor = imageColor;
+                    Vector3 rFactor = ComputeRFactor(point, N);
+                    Vector3 gFactor = ComputeGFactor(point, N);
+                    Vector3 bFactor = ComputeBFactor(point, N);
+                    I = rFactor + gFactor + bFactor;
+                    objColor = temp;
+                }
+                else if (LogicFile.isLight && LogicFile.isReflections)
+                {
+                    //I = new Vector3(0f, 0f, 0f);
+                    I = kd * lightColor * imageColor * cosNL + ks * lightColor * imageColor * (float)Math.Pow(cosVR, m);
+                    Vector3 rFactor = ComputeRFactor(point, N);
+                    Vector3 gFactor = ComputeGFactor(point, N);
+                    Vector3 bFactor = ComputeBFactor(point, N);
+                    I = I + rFactor + gFactor + bFactor;
+                }
+
+
+                
             }
             float Redfactor = I.X * 255;
             float GreenFactor = I.Y * 255;
@@ -173,5 +230,55 @@ namespace BezierGraphics
         }
 
 
+        public static Vector3 ComputeRFactor(Vector3 point, Vector3 N)
+        {
+            Vector3 DR = DefineVectorBetween(constlightPosition, ReflectorRPosition); // DR
+            DR = Vector3.Normalize(DR);
+            Vector3 LR = DefineVectorBetween(point, ReflectorRPosition);
+            LR = Vector3.Normalize(LR);
+            float cosLDR = ComputeCos(LR, DR);
+            Vector3 RR = ComputeR(N, LR);
+            //RR = Vector3.Normalize(RR);
+            float cosVR = ComputeCos(V, RR);
+            float cosNL = ComputeCos(N, LR);
+
+            Vector3 I = kd * RColor * (float)Math.Pow(cosLDR, 10) * objColor * cosNL + ks * RColor * (float)Math.Pow(cosLDR, 10) * objColor * (float)Math.Pow(cosVR, m);
+            //I = Vector3.Normalize(I);
+            return I;
+        }
+
+        public static Vector3 ComputeGFactor(Vector3 point, Vector3 N)
+        {
+            Vector3 DG = DefineVectorBetween(constlightPosition, ReflectorGPosition); // DR
+            DG = Vector3.Normalize(DG);
+            Vector3 LG = DefineVectorBetween(point, ReflectorGPosition);
+            LG = Vector3.Normalize(LG);
+            float cosLDG = ComputeCos(LG, DG);
+            Vector3 RR = ComputeR(N, LG);
+            //RR = Vector3.Normalize(RR);
+            float cosVR = ComputeCos(V, RR);
+            float cosNL = ComputeCos(N, LG);
+
+            Vector3 I = kd * GColor * (float)Math.Pow(cosLDG, 10) * objColor * cosNL + ks * GColor * (float)Math.Pow(cosLDG, 10) * objColor * (float)Math.Pow(cosVR, m);
+            //I = Vector3.Normalize(I);
+            return I;
+        }
+
+        public static Vector3 ComputeBFactor(Vector3 point, Vector3 N)
+        {
+            Vector3 DB = DefineVectorBetween(constlightPosition, ReflectorBPosition); // DR
+            DB = Vector3.Normalize(DB);
+            Vector3 LB = DefineVectorBetween(point, ReflectorBPosition);
+            LB = Vector3.Normalize(LB);
+            float cosLDB = ComputeCos(LB, DB);
+            Vector3 RR = ComputeR(N, LB);
+            //RR = Vector3.Normalize(RR);
+            float cosVR = ComputeCos(V, RR);
+            float cosNL = ComputeCos(N, LB);
+
+            Vector3 I = kd * BColor * (float)Math.Pow(cosLDB, 10) * objColor * cosNL + ks * BColor * (float)Math.Pow(cosLDB, 10) * objColor * (float)Math.Pow(cosVR, m);
+            //I = Vector3.Normalize(I);
+            return I;
+        }
     }
 }

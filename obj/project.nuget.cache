@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "WdBEO8AfmlcJCujxp1iqaP+lZz5rXmwzUBDjeXEA/Sp7uhVsezm4N55LPJIQIssdrboFEVq+bsBzW75jlnOTyA==",
+  "dgSpecHash": "uXjIQAwMa3iQThii5G8Y3ZhnfHvwqXj8ST7zjroi2GMLxe9gSBWH53O0mvn4lXXbRA2iktAlQeKQu0a/rCF0hg==",
   "success": true,
   "projectFilePath": "C:\\Users\\user\\Desktop\\sem5\\GrafikaKomputerowa\\BezierGraphics\\BezierGraphics\\BezierGraphics.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\5.0.17\\microsoft.netcore.app.host.win-x64.5.0.17.nupkg.sha512"
+  ],
   "logs": []
 }

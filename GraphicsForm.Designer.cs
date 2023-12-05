@@ -35,6 +35,7 @@ namespace BezierGraphics
             this.ZValueTrackBar = new System.Windows.Forms.TrackBar();
             this.ShowControlPointsCheckBox = new System.Windows.Forms.CheckBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.ShowColorsCheckBox = new System.Windows.Forms.CheckBox();
             this.GridChangeLabel = new System.Windows.Forms.Label();
             this.GridSizeTrackBar = new System.Windows.Forms.TrackBar();
             this.ShowGridCheckBox = new System.Windows.Forms.CheckBox();
@@ -55,11 +56,14 @@ namespace BezierGraphics
             this.SolidColorRadioButton = new System.Windows.Forms.RadioButton();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.isReflectorsCheckBox = new System.Windows.Forms.CheckBox();
+            this.isLightCheckBox = new System.Windows.Forms.CheckBox();
             this.LightMovementLabel = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.ZCoordinateTrackBar = new System.Windows.Forms.TrackBar();
             this.LightMoveCheckBox = new System.Windows.Forms.CheckBox();
+            this.isRotateCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pic)).BeginInit();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZValueTrackBar)).BeginInit();
@@ -131,6 +135,7 @@ namespace BezierGraphics
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.ShowColorsCheckBox);
             this.groupBox2.Controls.Add(this.GridChangeLabel);
             this.groupBox2.Controls.Add(this.GridSizeTrackBar);
             this.groupBox2.Controls.Add(this.ShowGridCheckBox);
@@ -141,6 +146,18 @@ namespace BezierGraphics
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Triangle grid";
+            // 
+            // ShowColorsCheckBox
+            // 
+            this.ShowColorsCheckBox.AutoSize = true;
+            this.ShowColorsCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.ShowColorsCheckBox.Location = new System.Drawing.Point(6, 58);
+            this.ShowColorsCheckBox.Name = "ShowColorsCheckBox";
+            this.ShowColorsCheckBox.Size = new System.Drawing.Size(111, 24);
+            this.ShowColorsCheckBox.TabIndex = 3;
+            this.ShowColorsCheckBox.Text = "Show colors";
+            this.ShowColorsCheckBox.UseVisualStyleBackColor = true;
+            this.ShowColorsCheckBox.CheckStateChanged += new System.EventHandler(this.ShowColorsCheckBox_CheckStateChanged);
             // 
             // GridChangeLabel
             // 
@@ -169,7 +186,7 @@ namespace BezierGraphics
             // 
             this.ShowGridCheckBox.AutoSize = true;
             this.ShowGridCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.ShowGridCheckBox.Location = new System.Drawing.Point(6, 51);
+            this.ShowGridCheckBox.Location = new System.Drawing.Point(6, 28);
             this.ShowGridCheckBox.Name = "ShowGridCheckBox";
             this.ShowGridCheckBox.Size = new System.Drawing.Size(153, 24);
             this.ShowGridCheckBox.TabIndex = 0;
@@ -357,6 +374,8 @@ namespace BezierGraphics
             // 
             // groupBox6
             // 
+            this.groupBox6.Controls.Add(this.isReflectorsCheckBox);
+            this.groupBox6.Controls.Add(this.isLightCheckBox);
             this.groupBox6.Controls.Add(this.LightMovementLabel);
             this.groupBox6.Controls.Add(this.button1);
             this.groupBox6.Controls.Add(this.label1);
@@ -369,6 +388,30 @@ namespace BezierGraphics
             this.groupBox6.TabIndex = 7;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Light";
+            // 
+            // isReflectorsCheckBox
+            // 
+            this.isReflectorsCheckBox.AutoSize = true;
+            this.isReflectorsCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.isReflectorsCheckBox.Location = new System.Drawing.Point(328, 135);
+            this.isReflectorsCheckBox.Name = "isReflectorsCheckBox";
+            this.isReflectorsCheckBox.Size = new System.Drawing.Size(97, 24);
+            this.isReflectorsCheckBox.TabIndex = 6;
+            this.isReflectorsCheckBox.Text = "Reflectors";
+            this.isReflectorsCheckBox.UseVisualStyleBackColor = true;
+            this.isReflectorsCheckBox.CheckStateChanged += new System.EventHandler(this.isReflectorsCheckBox_CheckStateChanged);
+            // 
+            // isLightCheckBox
+            // 
+            this.isLightCheckBox.AutoSize = true;
+            this.isLightCheckBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.isLightCheckBox.Location = new System.Drawing.Point(328, 105);
+            this.isLightCheckBox.Name = "isLightCheckBox";
+            this.isLightCheckBox.Size = new System.Drawing.Size(64, 24);
+            this.isLightCheckBox.TabIndex = 5;
+            this.isLightCheckBox.Text = "Light";
+            this.isLightCheckBox.UseVisualStyleBackColor = true;
+            this.isLightCheckBox.CheckStateChanged += new System.EventHandler(this.isLightCheckBox_CheckStateChanged);
             // 
             // LightMovementLabel
             // 
@@ -404,8 +447,8 @@ namespace BezierGraphics
             // ZCoordinateTrackBar
             // 
             this.ZCoordinateTrackBar.Location = new System.Drawing.Point(179, 58);
-            this.ZCoordinateTrackBar.Maximum = 30;
-            this.ZCoordinateTrackBar.Minimum = 10;
+            this.ZCoordinateTrackBar.Maximum = 50;
+            this.ZCoordinateTrackBar.Minimum = 20;
             this.ZCoordinateTrackBar.Name = "ZCoordinateTrackBar";
             this.ZCoordinateTrackBar.Size = new System.Drawing.Size(264, 56);
             this.ZCoordinateTrackBar.SmallChange = 2;
@@ -425,11 +468,23 @@ namespace BezierGraphics
             this.LightMoveCheckBox.UseVisualStyleBackColor = true;
             this.LightMoveCheckBox.CheckStateChanged += new System.EventHandler(this.LightMoveCheckBox_CheckStateChanged);
             // 
+            // isRotateCheckBox
+            // 
+            this.isRotateCheckBox.AutoSize = true;
+            this.isRotateCheckBox.Location = new System.Drawing.Point(932, 884);
+            this.isRotateCheckBox.Name = "isRotateCheckBox";
+            this.isRotateCheckBox.Size = new System.Drawing.Size(75, 24);
+            this.isRotateCheckBox.TabIndex = 8;
+            this.isRotateCheckBox.Text = "Rotate";
+            this.isRotateCheckBox.UseVisualStyleBackColor = true;
+            this.isRotateCheckBox.CheckStateChanged += new System.EventHandler(this.isRotateCheckBox_CheckStateChanged);
+            // 
             // BezierGraphics
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1482, 953);
+            this.Controls.Add(this.isRotateCheckBox);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -462,6 +517,7 @@ namespace BezierGraphics
             this.groupBox6.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ZCoordinateTrackBar)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -498,6 +554,10 @@ namespace BezierGraphics
         private System.Windows.Forms.TrackBar ZCoordinateTrackBar;
         private System.Windows.Forms.CheckBox LightMoveCheckBox;
         private System.Windows.Forms.Label LightMovementLabel;
+        private System.Windows.Forms.CheckBox ShowColorsCheckBox;
+        private System.Windows.Forms.CheckBox isReflectorsCheckBox;
+        private System.Windows.Forms.CheckBox isLightCheckBox;
+        private System.Windows.Forms.CheckBox isRotateCheckBox;
     }
 }
 

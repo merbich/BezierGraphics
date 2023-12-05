@@ -145,7 +145,21 @@ namespace BezierGraphics
                         c = ColorFile.ComputeColor(X, Y, Z, LogicFile.ZControlPoints, norm);
 
                     if (x >= 900) continue;
-                    LogicFile.bm.SetPixel(x, scan, c);
+                    //LogicFile.bm.SetPixel(x, scan, c);
+
+                    if(!LogicFile.isRotate)
+                    {
+                        LogicFile.bm.SetPixel(x, scan, c);
+                    }
+                    else
+                    {
+                        Vector3 p = new Vector3(x, scan, 100*Z);
+                        p = Vector3.Transform(p, LogicFile.M);
+                        if (p.X < 0 || p.Y < 0) continue;
+                        LogicFile.bm.SetPixel((int)p.X, (int)p.Y, c);
+                    }
+
+                    
                 }
                 
             }

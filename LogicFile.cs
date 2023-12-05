@@ -29,10 +29,16 @@ namespace BezierGraphics
         public static bool isNormalMap = false;
         public static bool isBackgroundImage = false;
         public static bool isAnimation = false;
+        public static bool isColors = true;
+        public static bool isReflections = true;
+        public static bool isLight = true;
+        public static bool isRotate = false;
 
         public static int GridSize = 6;
         public static (bool, int) zControlPoint = (false, -1);
         public static float ZAmimatePosition = 2f;
+
+        public static Matrix4x4 M;
 
         public static (float, float)[] ControlPoints = {(0f,0f), (1/3f, 0f), (2/3f, 0f), (1f, 0f),
                                                    (0f, 1/3f), (1/3f, 1/3f), (2/3f, 1/3f), (1f, 1/3f),
@@ -58,22 +64,28 @@ namespace BezierGraphics
                 ZControlPoints[i] = 0f;
                 isControlPointsBool[i] = false;
             }
-            //ZControlPoints[3] = 0.0001f;
-            //ZControlPoints[0] = 00000000.1f;
-            //-------
-            //ComputeZ();
             CalculateBasicTriangles(true);
             InitTriangles();
             FillTriangles();
-            //Animate();
-            //Draw();
+
+            double al = ConvertAngleToRadians(3);
+            double beta = ConvertAngleToRadians(6);
+            M = Matrix4x4.CreateTranslation(-bm.Width / 2, -bm.Height/2, 0f)*
+                Matrix4x4.CreateFromYawPitchRoll(0f, (float)al, (float)beta)*
+                Matrix4x4.CreateTranslation(bm.Width / 2, bm.Height / 2, 0f);
+           
+            //Matrix4x4.CreateFromYawPitchRoll(0f, (float)al, (float)beta);
+            //Matrix4x4.CreateTranslation(bm.Width / 2, bm.Height / 2, 0f);
         }
         #endregion
         #region Drawing
+        public static double ConvertAngleToRadians(double angle)
+        {
+            double radians = angle * 2 * Math.PI;
+            return radians;
+        }
         public static void Draw()
         {
-            //g.Clear(Color.White);
-            //_ = FillTrianglesAsync();
             DrawControlPoints(isControlPoints);
             DrawBezierGrid(isBezierGrid, GridSize);
             pic.Refresh();
@@ -201,14 +213,13 @@ namespace BezierGraphics
         public static void FillTriangles()
         {
             //g.Clear(Color.White);
-            //List<Task> tasks = new List<Task>();
             //foreach(Triangle t in triangles)
             //{
-            //    //FillPolygon.FillPolygonMethod(t.edges, t);
-            //    tasks.Add(ProcessTriangleAsync(t));
+            //    FillPolygon.FillPolygonMethod(t);
             //}
-            //await Task.WhenAll(tasks);
             //Draw();
+
+
             g.Clear(Color.White);
             Parallel.ForEach(triangles, t =>
             {
@@ -342,8 +353,8 @@ namespace BezierGraphics
             float sinAngle = (float)Math.Sin(angle);
 
             // Transform the vector by substituting into the rotated ellipse equation
-            float X = 0.5f + 0.2f * ColorFile.lightPosition.X * cosAngle - 0.1f * ColorFile.lightPosition.Y * sinAngle;
-            float Y = 0.5f + 0.2f * ColorFile.lightPosition.X * sinAngle + 0.1f * ColorFile.lightPosition.Y * cosAngle;
+            float X = 0.5f + 0.4f * ColorFile.lightPosition.X * cosAngle - 0.3f * ColorFile.lightPosition.Y * sinAngle;
+            float Y = 0.5f + 0.4f * ColorFile.lightPosition.X * sinAngle + 0.3f * ColorFile.lightPosition.Y * cosAngle;
 
 
             //float X = 0.1f * ColorFile.lightPosition.X + 0.5f;
